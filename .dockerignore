@@ -1,0 +1,11 @@
+node_modules
+dist
+build
+.git
+data
+*.db
+*.db-wal
+*.db-shm
+.env
+coverage
+.vite
