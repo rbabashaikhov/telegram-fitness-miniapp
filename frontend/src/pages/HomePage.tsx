@@ -1,13 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api/client';
 import { TabBar } from '../components/TabBar';
 import { useApp } from '../context/AppContext';
-import { formatDateLabel, greeting, visitWord } from '../lib/format';
+import { useBusiness } from '../context/BusinessContext';
+import { greeting, visitWord, formatDateLabel } from '../lib/format';
+import { membershipHomeState } from '../lib/membershipCta';
 import type { Portal } from '../types';
+
+function todayDateString(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+}
 
 export function HomePage() {
   const { user } = useApp();
+  const business = useBusiness();
   const [portal, setPortal] = useState<Portal | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,6 +33,16 @@ export function HomePage() {
       cancelled = true;
     };
   }, []);
+
+  const membershipState = useMemo(
+    () =>
+      membershipHomeState(portal?.membership ?? null, {
+        today: todayDateString(),
+        expiringDays: business.retention.expiringDays,
+        lowVisits: business.retention.lowVisits,
+      }),
+    [business.retention.expiringDays, business.retention.lowVisits, portal?.membership],
+  );
 
   if (error) {
     return (
@@ -59,18 +77,30 @@ export function HomePage() {
 
       {membership ? (
         <article className="card membership-hero" data-demo-tour="client-membership">
-          <p className="eyebrow">{membership.status === 'ACTIVE' ? 'Активный абонемент' : membership.status}</p>
+          <p className="eyebrow">{membershipState.eyebrow}</p>
           <h2>{membership.name}</h2>
-          <p className="muted">Действует до {formatDateLabel(membership.expiresAt)}</p>
-          {membership.membershipType === 'VISIT_BASED' && membership.remainingVisits !== null && (
-            <p className="hero-metric">Осталось {membership.remainingVisits} посещений</p>
-          )}
-          {membership.membershipType === 'UNLIMITED' && <p className="hero-metric">Безлимит групповых классов</p>}
+          {membershipState.remainingLine && <p className="hero-metric">{membershipState.remainingLine}</p>}
+          {membershipState.expiresLine && <p className="muted">{membershipState.expiresLine}</p>}
+          <div className="row-actions">
+            <Link to={membershipState.primary.to} className="btn btn-primary">
+              {membershipState.primary.label}
+            </Link>
+            {membershipState.secondary && (
+              <Link to={membershipState.secondary.to} className="btn btn-secondary">
+                {membershipState.secondary.label}
+              </Link>
+            )}
+          </div>
         </article>
       ) : (
-        <article className="card">
+        <article className="card" data-demo-tour="client-membership">
           <h2>Нет активного абонемента</h2>
-          <p className="muted">Обратитесь к администратору клуба, чтобы оформить карту.</p>
+          <p className="muted">Выберите тариф, чтобы записываться на тренировки.</p>
+          <div className="row-actions">
+            <Link to={membershipState.primary.to} className="btn btn-primary btn-block">
+              {membershipState.primary.label}
+            </Link>
+          </div>
         </article>
       )}
 

@@ -18,9 +18,10 @@ SQLite                  External CRM stub
 
 + EventProvider (local | mock | webhook)
 + NotificationProvider (local | mock | webhook)
++ PaymentProvider (mock | external)
 ```
 
-`DATA_MODE`, `EVENT_ADAPTER` and `NOTIFICATION_ADAPTER` are resolved in `backend/src/container.ts`. Services never branch on `if (crmMode)`.
+`DATA_MODE`, `EVENT_ADAPTER`, `NOTIFICATION_ADAPTER` and `PAYMENT_ADAPTER` are resolved in `backend/src/container.ts`. Services never branch on `if (crmMode)`.
 
 ## Layers
 
@@ -28,7 +29,7 @@ SQLite                  External CRM stub
 | --- | --- |
 | Routes | HTTP, auth, validation, serialization |
 | Application services | Booking, membership ledger, retention, progress |
-| Ports | `CustomerProvider`, `MembershipProvider`, `BookingProvider`, `ScheduleProvider`, `TrainerProvider`, `ActivityProvider`, `EventProvider`, `NotificationProvider` |
+| Ports | `CustomerProvider`, `MembershipProvider`, `BookingProvider`, `ScheduleProvider`, `TrainerProvider`, `ActivityProvider`, `EventProvider`, `NotificationProvider`, `PaymentProvider` |
 | Adapters | SQLite local, CRM stub, webhook/mock events |
 
 Dependency direction: routes → services → ports ← adapters.

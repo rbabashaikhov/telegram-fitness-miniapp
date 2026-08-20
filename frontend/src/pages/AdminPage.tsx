@@ -93,11 +93,11 @@ export function AdminPage({ demo = false }: { demo?: boolean }) {
     <div className="admin-layout">
       <header className="admin-header">
         <div>
-          <p className="eyebrow">{demo ? 'Sales demo' : 'Admin'}</p>
+          <p className="eyebrow">{demo ? 'Демо · только чтение' : 'Кабинет администратора'}</p>
           <h1>Pulse Fitness Club</h1>
         </div>
         <Link to="/" className="btn btn-secondary">
-          К клиенту
+          Открыть клиентское приложение
         </Link>
       </header>
 

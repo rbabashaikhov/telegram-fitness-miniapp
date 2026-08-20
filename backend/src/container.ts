@@ -7,6 +7,8 @@ import { createWebhookEventPublisher } from './providers/events/webhook.js';
 import { createLocalProviders } from './providers/local/sqlite.js';
 import { createMockNotificationProvider } from './providers/notifications/mock.js';
 import { createWebhookNotificationProvider } from './providers/notifications/webhook.js';
+import { createExternalPaymentProvider } from './providers/payments/external.js';
+import { createMockPaymentProvider } from './providers/payments/mock.js';
 import type { Providers } from './providers/types.js';
 
 function composeProviders(): Providers {
@@ -34,16 +36,23 @@ function composeProviders(): Providers {
     );
   }
 
+  const payments =
+    config.paymentAdapter === 'external'
+      ? createExternalPaymentProvider()
+      : createMockPaymentProvider();
+
   logger.info('Providers composed', {
     dataMode: config.dataMode,
     eventAdapter: config.eventAdapter,
     notificationAdapter: config.notificationAdapter,
+    paymentAdapter: config.paymentAdapter,
   });
 
   return {
     ...data,
     events,
     notifications,
+    payments,
   };
 }
 

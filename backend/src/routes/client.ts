@@ -5,7 +5,7 @@ import { AppError, errorBody, statusFromError } from '../errors.js';
 import { authMiddleware } from '../middleware/auth.js';
 import { bookingRateLimit } from '../middleware/rateLimit.js';
 import { cancelBooking, createBooking } from '../services/booking.js';
-import { calculateMembershipBalance } from '../services/membership.js';
+import { calculateMembershipBalance, purchaseMembership } from '../services/membership.js';
 import { buildCustomerPortal, serializeBooking, serializeMembership, serializeSession } from '../services/portal.js';
 import { getCustomerProgress } from '../services/progress.js';
 
@@ -78,6 +78,20 @@ publicRouter.get('/schedule/:id', (req, res) => {
   res.json({ data: serializeSession(session, config.timezone) });
 });
 
+publicRouter.get('/membership-plans', (_req, res) => {
+  res.json({
+    data: providers.memberships.listPlans(true).map((plan) => ({
+      id: plan.id,
+      name: plan.name,
+      price: plan.price,
+      durationDays: plan.duration_days,
+      visitLimit: plan.visit_limit,
+      membershipType: plan.membership_type,
+      description: plan.description,
+    })),
+  });
+});
+
 meRouter.use(authMiddleware);
 
 meRouter.get('/', (req, res) => {
@@ -109,6 +123,26 @@ meRouter.get('/membership', (req, res) => {
     .listCustomerMemberships(customer.id)
     .map((item) => serializeMembership(calculateMembershipBalance(providers, item.id)));
   res.json({ data: memberships });
+});
+
+meRouter.post('/membership/purchase', (req, res) => {
+  try {
+    const planId = Number(req.body?.planId);
+    if (!Number.isFinite(planId) || planId <= 0) {
+      throw new AppError('planId is required', 400, 'VALIDATION_ERROR');
+    }
+    const user = req.auth!.telegramUser;
+    const { customer } = providers.customers.upsert(user);
+    const result = purchaseMembership(providers, { customerId: customer.id, planId });
+    res.status(201).json({
+      data: {
+        membership: serializeMembership(result.membership),
+        payment: result.payment,
+      },
+    });
+  } catch (error) {
+    res.status(statusFromError(error)).json(errorBody(error));
+  }
 });
 
 meRouter.get('/bookings', (req, res) => {

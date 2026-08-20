@@ -60,6 +60,21 @@ export function ClubPage() {
         </article>
       )}
 
+      {current ? (
+        <div className="row-actions">
+          <Link to={`/plans/${current.planId}`} className="btn btn-primary">
+            Продлить
+          </Link>
+          <Link to="/plans" className="btn btn-secondary">
+            Выбрать новый тариф
+          </Link>
+        </div>
+      ) : (
+        <Link to="/plans" className="btn btn-primary btn-block">
+          Выбрать абонемент
+        </Link>
+      )}
+
       <h2>Тренеры</h2>
       <div className="stack">
         {trainers.map((trainer) => (

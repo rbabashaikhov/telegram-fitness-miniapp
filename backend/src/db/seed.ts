@@ -1,5 +1,7 @@
 import type Database from 'better-sqlite3';
 import { createLocalProviders } from '../providers/local/sqlite.js';
+import { createMockPaymentProvider } from '../providers/payments/mock.js';
+import type { Providers } from '../providers/types.js';
 import { refreshMembershipCache } from '../services/membership.js';
 import { addDaysIso, addMinutesIso, localDateTimeToUtcIso, todayDateString, zonedParts } from '../services/time.js';
 
@@ -31,7 +33,10 @@ export function seed(database: Database.Database, now = new Date()): void {
   const existing = database.prepare('SELECT id FROM clubs LIMIT 1').get() as { id: number } | undefined;
   if (existing) return;
 
-  const providers = createLocalProviders(database);
+  const providers: Providers = {
+    ...createLocalProviders(database),
+    payments: createMockPaymentProvider(),
+  };
   const today = todayDateString(now, TZ);
 
   database
@@ -172,22 +177,40 @@ export function seed(database: Database.Database, now = new Date()): void {
     active: true,
   });
 
-  const premium = providers.memberships.createPlan({
-    name: 'Fitness Premium',
+  const dropIn = providers.memberships.createPlan({
+    name: 'Разовое посещение',
     membership_type: 'VISIT_BASED',
-    duration_days: 90,
-    visit_limit: 16,
-    price: 18900,
-    description: '16 посещений групповых классов. Списание после фактической тренировки.',
+    duration_days: 7,
+    visit_limit: 1,
+    price: 1500,
+    description: 'Одно групповое занятие. Удобно попробовать клуб без абонемента.',
+    active: true,
+  });
+  const visits8 = providers.memberships.createPlan({
+    name: '8 посещений',
+    membership_type: 'VISIT_BASED',
+    duration_days: 45,
+    visit_limit: 8,
+    price: 8900,
+    description: '8 групповых тренировок. Списание после фактического посещения.',
     active: true,
   });
   const visits12 = providers.memberships.createPlan({
-    name: '12 Visits',
+    name: '12 посещений',
     membership_type: 'VISIT_BASED',
     duration_days: 60,
     visit_limit: 12,
     price: 12900,
     description: '12 занятий на два месяца. Удобный старт без безлимита.',
+    active: true,
+  });
+  const unlimited = providers.memberships.createPlan({
+    name: 'Безлимит на месяц',
+    membership_type: 'UNLIMITED',
+    duration_days: 30,
+    visit_limit: null,
+    price: 9900,
+    description: 'Безлимит групповых классов на 30 дней.',
     active: true,
   });
   const personal8 = providers.memberships.createPlan({
@@ -199,13 +222,13 @@ export function seed(database: Database.Database, now = new Date()): void {
     description: '8 персональных слотов. Для силовой и технической работы.',
     active: true,
   });
-  const unlimited = providers.memberships.createPlan({
-    name: 'Monthly Unlimited',
-    membership_type: 'UNLIMITED',
-    duration_days: 30,
-    visit_limit: null,
-    price: 9900,
-    description: 'Безлимит групповых классов на 30 дней.',
+  const premium = providers.memberships.createPlan({
+    name: 'Fitness Premium',
+    membership_type: 'VISIT_BASED',
+    duration_days: 90,
+    visit_limit: 16,
+    price: 18900,
+    description: '16 посещений групповых классов. Списание после фактической тренировки.',
     active: true,
   });
 
@@ -336,6 +359,8 @@ export function seed(database: Database.Database, now = new Date()): void {
     );
   }
 
+  void dropIn;
+  void visits8;
   void personal8;
 
   const weekPlan: Array<{

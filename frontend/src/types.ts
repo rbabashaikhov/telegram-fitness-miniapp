@@ -7,6 +7,7 @@ export interface AppConfig {
   adminProtected: boolean;
   branding: { accent: string; logoUrl: string | null };
   features: { demoTour: boolean; demoAdminPreview: boolean };
+  retention: { expiringDays: number; lowVisits: number };
 }
 
 export interface Session {
@@ -62,6 +63,16 @@ export interface Membership {
   bookableVisits: number | null;
   freezeFrom: string | null;
   freezeUntil: string | null;
+  description: string;
+}
+
+export interface MembershipPlan {
+  id: number;
+  name: string;
+  price: number | null;
+  durationDays: number;
+  visitLimit: number | null;
+  membershipType: 'VISIT_BASED' | 'UNLIMITED';
   description: string;
 }
 

@@ -9,7 +9,7 @@ Club: **Pulse Fitness Club**. Medical data is not stored.
 - **Trainer** — тренер филиала.
 - **Activity** — тип класса (Functional, Yoga, Pilates, Stretching, Boxing, Cycle, Strength, HIIT).
 - **MembershipPlan** — шаблон: `VISIT_BASED` или `UNLIMITED`.
-- **CustomerMembership** — купленный абонемент.
+- **CustomerMembership** — купленный абонемент. Клиент оформляет его через `POST /api/me/membership/purchase`; продление — вторая покупка нового membership.
 - **ClassSession** — конкретное занятие в расписании.
 - **Booking** — запись клиента на занятие.
 - **MembershipLedger** — журнал движения посещений.

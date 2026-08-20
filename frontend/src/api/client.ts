@@ -6,6 +6,7 @@ import type {
   Booking,
   LedgerEntry,
   Membership,
+  MembershipPlan,
   Portal,
   Progress,
   RetentionSignal,
@@ -66,6 +67,15 @@ export const api = {
   getConfig: () => request<{ data: AppConfig }>('/api/config'),
   getPortal: () => request<{ data: Portal | null }>('/api/me/portal'),
   getMemberships: () => request<{ data: Membership[] }>('/api/me/membership'),
+  getMembershipPlans: () => request<{ data: MembershipPlan[] }>('/api/membership-plans'),
+  purchaseMembership: (planId: number) =>
+    request<{ data: { membership: Membership; payment: { id: string; status: string } } }>(
+      '/api/me/membership/purchase',
+      {
+        method: 'POST',
+        body: JSON.stringify({ planId }),
+      },
+    ),
   getMyBookings: () => request<{ data: Booking[] }>('/api/me/bookings'),
   getProgress: () => request<{ data: Progress }>('/api/me/progress'),
   getActivities: () => request<{ data: Activity[] }>('/api/activities'),

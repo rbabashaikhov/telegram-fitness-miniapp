@@ -40,6 +40,7 @@ npm run dev
 | `DATA_MODE` | `local` или `crm` (stub 501) |
 | `EVENT_ADAPTER` | `local` / `mock` / `webhook` |
 | `NOTIFICATION_ADAPTER` | `local` / `mock` / `webhook` |
+| `PAYMENT_ADAPTER` | `mock` / `external` (`501 PAYMENT_NOT_CONFIGURED`) |
 | `ADMIN_TOKEN` | Write admin. Пустой токен **не** открывает записи |
 | `DATABASE_PATH` | SQLite file. Docker: `/data/fitness.db` |
 

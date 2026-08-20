@@ -18,8 +18,8 @@ export function DemoChrome({
         </button>
       )}
       {showAdmin && (
-        <Link className="demo-chrome-link" to="/demo/admin">
-          Админка
+        <Link className="demo-chrome-cta" to="/demo/admin">
+          Кабинет администратора
         </Link>
       )}
     </div>

@@ -159,7 +159,7 @@ function mapBooking(row: BookingRow): BookingDetails {
   };
 }
 
-export function createLocalProviders(database: Database.Database): Providers {
+export function createLocalProviders(database: Database.Database): Omit<Providers, 'payments'> {
   const getSessionById = database.prepare(`${SESSION_SELECT} WHERE s.id = ?`);
   const getBookingById = database.prepare(`${BOOKING_SELECT} WHERE b.id = ?`);
 

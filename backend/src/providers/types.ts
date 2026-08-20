@@ -148,6 +148,13 @@ export interface NotificationProvider {
   list(customerId?: number): NotificationRecord[];
 }
 
+export interface PaymentProvider {
+  createIntent(params: { customerId: number; planId: number; amount: number }): {
+    id: string;
+    status: 'mock';
+  };
+}
+
 export interface Providers {
   club: ClubProvider;
   customers: CustomerProvider;
@@ -158,5 +165,6 @@ export interface Providers {
   bookings: BookingProvider;
   events: EventProvider;
   notifications: NotificationProvider;
+  payments: PaymentProvider;
   transaction<T>(fn: () => T): T;
 }

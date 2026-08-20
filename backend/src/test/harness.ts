@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import { migrate } from '../db/schema.js';
 import { seed } from '../db/seed.js';
 import { createLocalProviders } from '../providers/local/sqlite.js';
+import { createMockPaymentProvider } from '../providers/payments/mock.js';
 import type { Providers } from '../providers/types.js';
 import { addDaysIso, localDateTimeToUtcIso, todayDateString } from '../services/time.js';
 
@@ -19,10 +20,14 @@ export interface TestWorld {
   planUnlimitedId: number;
 }
 
+function withMockPayments(data: Omit<Providers, 'payments'>): Providers {
+  return { ...data, payments: createMockPaymentProvider() };
+}
+
 export function createTestWorld(now = new Date('2026-08-18T09:00:00+03:00')): TestWorld {
   const db = new Database(':memory:');
   migrate(db);
-  const providers = createLocalProviders(db);
+  const providers = withMockPayments(createLocalProviders(db));
   const today = todayDateString(now, 'Europe/Moscow');
 
   db.prepare(
@@ -111,5 +116,5 @@ export function seedDemoDb(now = new Date('2026-08-18T09:00:00+03:00')) {
   const db = new Database(':memory:');
   migrate(db);
   seed(db, now);
-  return { db, providers: createLocalProviders(db) };
+  return { db, providers: withMockPayments(createLocalProviders(db)) };
 }

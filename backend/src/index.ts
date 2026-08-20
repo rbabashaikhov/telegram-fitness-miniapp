@@ -51,6 +51,7 @@ app.get('/api/health', (_req, res) => {
       dataMode: config.dataMode,
       eventAdapter: config.eventAdapter,
       notificationAdapter: config.notificationAdapter,
+      paymentAdapter: config.paymentAdapter,
       demoMode: config.allowDemoMode,
       adminProtected: Boolean(config.admin.token) || config.isProduction,
     });
@@ -112,6 +113,7 @@ if (!config.isTest) {
       eventAdapter: config.eventAdapter,
       demoMode: config.allowDemoMode,
       adminProtected: Boolean(config.admin.token) || config.isProduction,
+      paymentAdapter: config.paymentAdapter,
       business: publicAppConfig(),
     });
     if (!config.admin.token) {

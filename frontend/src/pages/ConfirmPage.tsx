@@ -76,9 +76,15 @@ export function ConfirmPage() {
         <p className="notice">Посещение будет списано после фактического посещения тренировки.</p>
       </article>
       {error && <div className="state-block">{error}</div>}
-      <button type="button" className="btn btn-primary btn-block" disabled={busy || !membership} onClick={() => void confirm()}>
-        {busy ? 'Записываем…' : 'Подтвердить запись'}
-      </button>
+      {membership?.status === 'ACTIVE' ? (
+        <button type="button" className="btn btn-primary btn-block" disabled={busy} onClick={() => void confirm()}>
+          {busy ? 'Записываем…' : 'Подтвердить запись'}
+        </button>
+      ) : (
+        <Link to="/plans" className="btn btn-primary btn-block">
+          Выбрать абонемент
+        </Link>
+      )}
     </div>
   );
 }

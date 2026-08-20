@@ -8,6 +8,8 @@ describe('publicAppConfig', () => {
     expect(json).not.toMatch(/ADMIN_TOKEN|adminToken|webhookSecret|telegramBotToken/i);
     expect(published).not.toHaveProperty('admin');
     expect(published).not.toHaveProperty('telegramBotToken');
+    expect(published.retention.expiringDays).toBeGreaterThan(0);
+    expect(published.retention.lowVisits).toBeGreaterThan(0);
   });
 });
 

@@ -10,6 +10,7 @@ export const DEFAULT_APP_CONFIG: AppConfig = {
   adminProtected: true,
   branding: { accent: '#C6FF4A', logoUrl: null },
   features: { demoTour: true, demoAdminPreview: true },
+  retention: { expiringDays: 7, lowVisits: 2 },
 };
 
 export const BusinessContext = createContext<AppConfig>(DEFAULT_APP_CONFIG);

@@ -187,6 +187,32 @@ export function issueMembership(
   return calculateMembershipBalance(providers, membership.id);
 }
 
+export function purchaseMembership(
+  providers: Providers,
+  params: {
+    customerId: number;
+    planId: number;
+  },
+): { membership: MembershipBalance; payment: { id: string; status: 'mock' } } {
+  const plan = providers.memberships.getPlan(params.planId);
+  if (!plan || !plan.active) {
+    throw new AppError('Membership plan not found', 404, 'PLAN_NOT_FOUND');
+  }
+
+  const payment = providers.payments.createIntent({
+    customerId: params.customerId,
+    planId: plan.id,
+    amount: plan.price ?? 0,
+  });
+
+  const membership = issueMembership(providers, {
+    customerId: params.customerId,
+    planId: plan.id,
+  });
+
+  return { membership, payment };
+}
+
 function addDaysInclusive(isoDate: string, days: number): string {
   const [y, m, d] = isoDate.split('-').map(Number);
   const date = new Date(Date.UTC(y, m - 1, d + days));

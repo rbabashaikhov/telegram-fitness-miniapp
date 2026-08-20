@@ -35,6 +35,7 @@ export function createCrmProviders(): Providers {
     bookings: stub as Providers['bookings'],
     events: stub as Providers['events'],
     notifications: stub as Providers['notifications'],
+    payments: stub as Providers['payments'],
     transaction<T>(fn: () => T): T {
       return fn();
     },

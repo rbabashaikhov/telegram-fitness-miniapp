@@ -37,6 +37,38 @@ export function visitWord(count: number): string {
   return 'тренировок';
 }
 
+export function visitCountWord(count: number): string {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return 'посещение';
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'посещения';
+  return 'посещений';
+}
+
+export function dayCountWord(count: number): string {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return 'день';
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'дня';
+  return 'дней';
+}
+
+export function formatPrice(amount: number | null): string {
+  if (amount === null) return 'По запросу';
+  return `${new Intl.NumberFormat('ru-RU').format(amount)} ₽`;
+}
+
+export function formatPlanTerm(plan: {
+  durationDays: number;
+  visitLimit: number | null;
+  membershipType: string;
+}): string {
+  const duration = `${plan.durationDays} ${dayCountWord(plan.durationDays)}`;
+  if (plan.membershipType === 'UNLIMITED') return `Безлимит · ${duration}`;
+  const visits = plan.visitLimit ?? 0;
+  return `${visits} ${visitCountWord(visits)} · ${duration}`;
+}
+
 export function formatBookingStatus(status: string): string {
   if (status === 'ATTENDED') return 'Посещена';
   if (status === 'CANCELLED') return 'Отменена';

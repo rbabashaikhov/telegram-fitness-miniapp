@@ -483,6 +483,7 @@ h3 {
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 8px;
 }
 
@@ -501,6 +502,19 @@ h3 {
   color: var(--text-secondary);
   font-weight: 700;
   font-size: 0.88rem;
+}
+
+.demo-chrome-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--accent);
 }
 
 .demo-sheet-backdrop,

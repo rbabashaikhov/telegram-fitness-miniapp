@@ -6,6 +6,8 @@ import { AdminPage, DemoAdminPage } from './pages/AdminPage';
 import { ClubPage } from './pages/ClubPage';
 import { ConfirmPage } from './pages/ConfirmPage';
 import { HomePage } from './pages/HomePage';
+import { PlanPurchasePage } from './pages/PlanPurchasePage';
+import { PlansPage } from './pages/PlansPage';
 import { SchedulePage } from './pages/SchedulePage';
 import { WorkoutsPage } from './pages/WorkoutsPage';
 
@@ -29,6 +31,8 @@ export default function App() {
         <Route path="/schedule/:id" element={<ConfirmPage />} />
         <Route path="/workouts" element={<WorkoutsPage />} />
         <Route path="/club" element={<ClubPage />} />
+        <Route path="/plans" element={<PlansPage />} />
+        <Route path="/plans/:id" element={<PlanPurchasePage />} />
         <Route path="/demo/admin" element={<DemoAdminPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

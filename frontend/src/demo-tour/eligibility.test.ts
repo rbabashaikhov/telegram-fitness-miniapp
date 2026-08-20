@@ -34,4 +34,8 @@ describe('sales demo eligibility', () => {
   it('keeps chrome in browser demo', () => {
     expect(canShowSalesDemoChrome({ ...demo, demoAdminPreviewEnabled: true })).toBe(true);
   });
+
+  it('hides chrome in Telegram', () => {
+    expect(canShowSalesDemoChrome({ ...demo, isTelegram: true, demoAdminPreviewEnabled: true })).toBe(false);
+  });
 });

@@ -18,6 +18,7 @@ const allowDemoMode =
 export type DataModeName = 'local' | 'crm';
 export type EventAdapterName = 'local' | 'webhook' | 'mock';
 export type NotificationAdapterName = 'local' | 'mock' | 'webhook';
+export type PaymentAdapterName = 'mock' | 'external';
 
 function dataModeName(value: string | undefined): DataModeName {
   if (value === 'crm' || value === 'local') return value;
@@ -34,6 +35,11 @@ function notificationAdapterName(value: string | undefined): NotificationAdapter
   return 'local';
 }
 
+function paymentAdapterName(value: string | undefined): PaymentAdapterName {
+  if (value === 'external' || value === 'mock') return value;
+  return 'mock';
+}
+
 export const config = {
   nodeEnv,
   isProduction: nodeEnv === 'production',
@@ -48,6 +54,7 @@ export const config = {
   dataMode: dataModeName(process.env.DATA_MODE),
   eventAdapter: eventAdapterName(process.env.EVENT_ADAPTER),
   notificationAdapter: notificationAdapterName(process.env.NOTIFICATION_ADAPTER),
+  paymentAdapter: paymentAdapterName(process.env.PAYMENT_ADAPTER),
   business: {
     name: process.env.BUSINESS_NAME || 'Pulse Fitness Club',
     title: process.env.APP_TITLE || 'Pulse Fitness Club',
@@ -101,6 +108,10 @@ export function publicAppConfig() {
     features: {
       demoTour: config.features.demoTour,
       demoAdminPreview: config.features.demoAdminPreview,
+    },
+    retention: {
+      expiringDays: config.retention.expiringDays,
+      lowVisits: config.retention.lowVisits,
     },
   };
 }

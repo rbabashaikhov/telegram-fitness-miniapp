@@ -38,6 +38,12 @@ Webhook adapter POSTs `{ id, name, payload, createdAt }` to `EVENT_WEBHOOK_URL`.
 
 Demo actions persist a notification record. Production can swap the adapter for Telegram Bot API or a message bus without changing retention services.
 
+## Payments
+
+`PAYMENT_ADAPTER=mock` (default, demo) returns a mock intent and the service calls existing `issueMembership()`.
+
+`PAYMENT_ADAPTER=external` throws **501 `PAYMENT_NOT_CONFIGURED`**. There is no acquiring in this demo.
+
 ## Auth
 
 Telegram Mini App: `x-telegram-init-data` validated with the bot token.
