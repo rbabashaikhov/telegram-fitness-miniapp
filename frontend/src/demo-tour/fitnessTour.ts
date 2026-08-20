@@ -63,7 +63,7 @@ export const fitnessDemoTour: DemoTourDefinition = {
       id: 'admin',
       target: 'admin-customers',
       route: '/demo/admin?tab=customers',
-      title: 'Админка',
+      title: 'Кабинет администратора',
       description: 'Клуб видит клиента, абонемент и запись. Отметка ATTENDED идёт через ledger.',
     },
     {
